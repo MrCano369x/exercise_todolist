@@ -32,7 +32,7 @@ export default function NewTaskModal({ state, close, func }) {
           </div>
 
           <div className="buttons">
-            <button className="button is-success">Save</button>
+            <button className="button is-primary">Save</button>
             <button className="button is-light" onClick={close}>
               Cancel
             </button>

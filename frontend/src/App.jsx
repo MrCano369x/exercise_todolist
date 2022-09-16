@@ -5,39 +5,51 @@ import useModal from "../hooks/useModal";
 
 const example_todolist = [
   {
+    id: "1",
     title: "todo1",
     description: "lorem ipsum dolor sit amet, consectetur adip",
     status: "pending",
   },
   {
+    id: "2",
     title: "todo2",
     description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "pending",
+    status: "done",
   },
   {
+    id: "3",
     title: "todo3",
     description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "pending",
+    status: "on progress",
   },
   {
+    id: "4",
     title: "todo4",
     description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "pending",
+    status: "on progress",
   },
   {
+    id: "5",
     title: "todo5",
     description: "lorem ipsum dolor sit amet, consectetur adip",
     status: "pending",
   },
   {
+    id: "6",
     title: "todo6",
     description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "pending",
+    status: "done",
   },
 ];
 
 export default function App() {
   const [todoList, setTodoList] = useState(example_todolist);
+  const [filter, setFilter] = useState("all");
+
+  const filteredTodoList =
+    filter == "all"
+      ? todoList
+      : todoList.filter((task) => task.status == filter);
 
   const addNewTask = (task) => {
     setTodoList([...todoList, task]);
@@ -55,24 +67,24 @@ export default function App() {
 
       <h1 className="title">TodoList</h1>
 
-      <button className="button is-success" onClick={openNewTaskModal}>
+      <button className="button is-primary" onClick={openNewTaskModal}>
         Create new task
       </button>
 
       <hr />
 
-      <div className="select">
+      <div className="select" onChange={(e) => setFilter(e.target.value)}>
         <select>
-          <option value="">Show all</option>
-          <option value="">Pending</option>
-          <option value="">On progress</option>
-          <option value="">Done</option>
+          <option value="all">Show all</option>
+          <option value="pending">Pending</option>
+          <option value="on progress">On progress</option>
+          <option value="done">Done</option>
         </select>
       </div>
 
       <div className="py-3">
-        {todoList.map((task) => (
-          <div className="box">
+        {filteredTodoList.map((task) => (
+          <div key={task.id} className="box">
             <h1 className="title">{task.title}</h1>
             <h2 className="subtitle">{task.description}</h2>
             <h3 className="">{task.status}</h3>
