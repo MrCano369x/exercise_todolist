@@ -1,34 +1,86 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import NewTaskModal from "../components/NewTaskModal";
+import Pagination from "../components/Pagination";
+import useModal from "../hooks/useModal";
 
-function App() {
-  const [count, setCount] = useState(0)
+const example_todolist = [
+  {
+    title: "todo1",
+    description: "lorem ipsum dolor sit amet, consectetur adip",
+    status: "pending",
+  },
+  {
+    title: "todo2",
+    description: "lorem ipsum dolor sit amet, consectetur adip",
+    status: "pending",
+  },
+  {
+    title: "todo3",
+    description: "lorem ipsum dolor sit amet, consectetur adip",
+    status: "pending",
+  },
+  {
+    title: "todo4",
+    description: "lorem ipsum dolor sit amet, consectetur adip",
+    status: "pending",
+  },
+  {
+    title: "todo5",
+    description: "lorem ipsum dolor sit amet, consectetur adip",
+    status: "pending",
+  },
+  {
+    title: "todo6",
+    description: "lorem ipsum dolor sit amet, consectetur adip",
+    status: "pending",
+  },
+];
+
+export default function App() {
+  const [todoList, setTodoList] = useState(example_todolist);
+
+  const addNewTask = (task) => {
+    setTodoList([...todoList, task]);
+  };
+
+  const [newTaskModalState, openNewTaskModal, closeNewTaskModal] = useModal();
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
+    <div className="container p-3">
+      <NewTaskModal
+        state={newTaskModalState}
+        close={closeNewTaskModal}
+        func={addNewTask}
+      />
 
-export default App
+      <h1 className="title">TodoList</h1>
+
+      <button className="button is-success" onClick={openNewTaskModal}>
+        Create new task
+      </button>
+
+      <hr />
+
+      <div className="select">
+        <select>
+          <option value="">Show all</option>
+          <option value="">Pending</option>
+          <option value="">On progress</option>
+          <option value="">Done</option>
+        </select>
+      </div>
+
+      <div className="py-3">
+        {todoList.map((task) => (
+          <div className="box">
+            <h1 className="title">{task.title}</h1>
+            <h2 className="subtitle">{task.description}</h2>
+            <h3 className="">{task.status}</h3>
+          </div>
+        ))}
+      </div>
+
+      <Pagination />
+    </div>
+  );
+}
