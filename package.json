@@ -1,0 +1,14 @@
+{
+  "name": "exercise_todolist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "startfront": "cd frontend && npm i && npm run dev",
+    "startback": "cd backend && npm i && node server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
