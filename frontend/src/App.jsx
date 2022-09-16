@@ -1,5 +1,6 @@
 import { useState } from "react";
 import NewTaskModal from "../components/NewTaskModal";
+import TaskModal from "../components/TaskModal";
 import Pagination from "../components/Pagination";
 import useModal from "../hooks/useModal";
 
@@ -45,16 +46,28 @@ const example_todolist = [
 export default function App() {
   const [todoList, setTodoList] = useState(example_todolist);
   const [filter, setFilter] = useState("all");
+  const [currentTask, setCurrentTask] = useState({});
 
   const filteredTodoList =
     filter == "all"
       ? todoList
       : todoList.filter((task) => task.status == filter);
 
-  const addNewTask = (task) => {
-    setTodoList([...todoList, task]);
+  const addNewTask = (newTask) => {
+    setTodoList([...todoList, newTask]);
   };
 
+  const updateTask = (taskId, updatedTask) => {
+    setTodoList(
+      todoList.map((task) => (task.id == taskId ? updatedTask : task))
+    );
+  };
+
+  const removeTask = (deletedTaskId) => {
+    setTodoList(todoList.filter((task) => task.id != deletedTaskId));
+  };
+
+  const [TaskModalState, openTaskModal, closeTaskModal] = useModal();
   const [newTaskModalState, openNewTaskModal, closeNewTaskModal] = useModal();
 
   return (
@@ -63,6 +76,14 @@ export default function App() {
         state={newTaskModalState}
         close={closeNewTaskModal}
         func={addNewTask}
+      />
+
+      <TaskModal
+        state={TaskModalState}
+        close={closeTaskModal}
+        task={currentTask}
+        updateTask={updateTask}
+        removeTask={removeTask}
       />
 
       <h1 className="title">TodoList</h1>
@@ -84,7 +105,14 @@ export default function App() {
 
       <div className="py-3">
         {filteredTodoList.map((task) => (
-          <div key={task.id} className="box">
+          <div
+            key={task.id}
+            className="box"
+            onClick={() => {
+              setCurrentTask(task);
+              openTaskModal();
+            }}
+          >
             <h1 className="title">{task.title}</h1>
             <h2 className="subtitle">{task.description}</h2>
             <h3 className="">{task.status}</h3>
