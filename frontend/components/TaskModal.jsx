@@ -49,6 +49,7 @@ function EditingMode({ task, editTask, setMode }) {
           </div>
         </div>
       </div>
+
       <div className="buttons pt-3 is-flex is-justify-content-center">
         <button className="button is-primary">Save</button>
         <button

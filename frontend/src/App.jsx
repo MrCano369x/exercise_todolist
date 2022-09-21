@@ -4,6 +4,16 @@ import TaskModal from "../components/TaskModal";
 import Pagination from "../components/Pagination";
 import useModal from "../hooks/useModal";
 
+const status_class = {
+  pending: "is-warning",
+  "on progree": "is-info",
+  done: "is-success",
+};
+
+const truncateDesc = (text) => {
+  return text.length > 120 ? text.substring(0, 120) + "..." : text;
+};
+
 export default function App() {
   const [todoList, setTodoList] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -75,8 +85,10 @@ export default function App() {
             }}
           >
             <h1 className="title">{task.title}</h1>
-            <h2 className="subtitle">{task.description}</h2>
-            <h3 className="">{task.status}</h3>
+            <h2 className="subtitle">{truncateDesc(task.description)}</h2>
+            <h3 className={`tag ${status_class[task.status]}`}>
+              {task.status}
+            </h3>
           </div>
         ))}
       </div>

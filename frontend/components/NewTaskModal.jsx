@@ -10,6 +10,7 @@ export default function NewTaskModal({ state, close, func }) {
     if (!res.success) return alert(res.msg);
     func(res.task);
     close();
+    e.target.reset();
   };
 
   return (
