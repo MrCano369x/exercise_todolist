@@ -1,22 +1,22 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import Modal from "./Modal";
+import { put, remove } from "../lib/fetch";
 
 function EditingMode({ task, editTask, setMode }) {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedTask = Object.fromEntries(new FormData(e.target));
-
     editTask(updatedTask);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <div class="field">
-        <label class="label">Title</label>
-        <div class="control">
+      <div className="field">
+        <label className="label">Title</label>
+        <div className="control">
           <input
-            class="input"
+            className="input"
             type="text"
             name="title"
             defaultValue={task.title}
@@ -25,11 +25,11 @@ function EditingMode({ task, editTask, setMode }) {
         </div>
       </div>
 
-      <div class="field">
-        <label class="label">Description</label>
-        <div class="control">
+      <div className="field">
+        <label className="label">Description</label>
+        <div className="control">
           <textarea
-            class="textarea"
+            className="textarea"
             name="description"
             defaultValue={task.description}
             required
@@ -37,9 +37,9 @@ function EditingMode({ task, editTask, setMode }) {
         </div>
       </div>
 
-      <div class="field">
-        <label class="label">Status</label>
-        <div class="control">
+      <div className="field">
+        <label className="label">Status</label>
+        <div className="control">
           <div className="select">
             <select defaultValue={task.status} name="status">
               <option value="pending">Pending</option>
@@ -86,18 +86,18 @@ function DeletingMode({ task, deleteTask, setMode }) {
 function NormalMode({ task, setMode }) {
   return (
     <>
-      <label class="label">Title</label>
+      <label className="label">Title</label>
       <h1 className="title">{task.title}</h1>
 
-      <label class="label">Description</label>
+      <label className="label">Description</label>
       <h2 className="subtitle">{task.description}</h2>
 
       {task.status != "done" && (
         <>
-          <label class="label">Status</label>
+          <label className="label">Status</label>
 
           <div className="select">
-            <select defaultValue={task.status} name="">
+            <select defaultValue={task.status}>
               <option value="pending">Pending</option>
               <option value="on progress">On progress</option>
               <option value="done">Done</option>
@@ -134,15 +134,21 @@ export default function TaskModal({
   const [mode, setMode] = useState("normal");
 
   const editTask = async (updatedTask) => {
-    //fetch api
-    updateTask.id = task.id;
-    updateTask(task.id, updatedTask);
+    const res = await put(
+      "http://localhost:3000/tasks/" + task._id,
+      updatedTask
+    );
+    if (!res.success) return alert(res.msg);
+
+    updateTask(task._id, res.task);
     close();
   };
 
-  const deleteTask = () => {
-    //fetch api
-    removeTask(task.id);
+  const deleteTask = async () => {
+    const res = await remove("http://localhost:3000/tasks/" + task._id);
+    if (!res.success) return alert(res.msg);
+
+    removeTask(task._id);
     close();
   };
 

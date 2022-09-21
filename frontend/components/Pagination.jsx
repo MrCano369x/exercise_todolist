@@ -1,9 +1,25 @@
-export default function Pagination({ todoList, page, setPage }) {
-  const pages = Math.ceil(todoList.length / 15);
+import { useEffect, useState } from "react";
+import { get } from "../lib/fetch";
 
-  const isValidPage = (page) => {
-    if (page < 1) return false;
-    if (page > pages) return false;
+export default function Pagination({ setTodoList }) {
+  const [pages, setPages] = useState(0);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    get("http://localhost:3000/tasks_total").then((data) =>
+      setPages(data.pages)
+    );
+  }, []);
+
+  useEffect(() => {
+    get("http://localhost:3000/tasks/" + page).then((data) =>
+      setTodoList(data.tasks)
+    );
+  }, [page]);
+
+  const isValidPage = (newPage) => {
+    if (newPage < 1) return false;
+    if (newPage > pages) return false;
     return true;
   };
 

@@ -1,13 +1,14 @@
 import Modal from "./Modal";
+import { post } from "../lib/fetch";
 
 export default function NewTaskModal({ state, close, func }) {
-  const createNewTask = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const task = Object.fromEntries(new FormData(e.target));
-    task.status = "pending";
-    //fetch api
 
-    func(task);
+    const res = await post("http://localhost:3000/tasks/", task);
+    if (!res.success) return alert(res.msg);
+    func(res.task);
     close();
   };
 
@@ -16,7 +17,7 @@ export default function NewTaskModal({ state, close, func }) {
       <div className="box">
         <h1 className="title">Create New Task</h1>
 
-        <form onSubmit={createNewTask}>
+        <form onSubmit={handleSubmit}>
           <div className="field">
             <label className="label">Title</label>
             <div className="control">

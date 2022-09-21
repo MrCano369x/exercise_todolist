@@ -4,34 +4,15 @@ import TaskModal from "../components/TaskModal";
 import Pagination from "../components/Pagination";
 import useModal from "../hooks/useModal";
 
-const statuses = ["pending", "on progress", "done"];
-
-const example_todolist = [];
-for (let i = 0; i < 71; i++) {
-  example_todolist.push({
-    id: i,
-    title: "Todo " + i,
-    description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: statuses[Math.trunc(Math.random() * 3)],
-  });
-}
-
 export default function App() {
-  const [todoList, setTodoList] = useState(example_todolist);
+  const [todoList, setTodoList] = useState([]);
   const [filter, setFilter] = useState("all");
   const [currentTask, setCurrentTask] = useState({});
-  const [page, setPage] = useState(1);
-  console.log(page);
 
   const filteredTodoList =
     filter == "all"
       ? todoList
       : todoList.filter((task) => task.status == filter);
-
-  const paginatedTodoList = filteredTodoList.slice(
-    (page - 1) * 15,
-    (page - 1) * 15 + 15
-  );
 
   const addNewTask = (newTask) => {
     setTodoList([...todoList, newTask]);
@@ -39,12 +20,12 @@ export default function App() {
 
   const updateTask = (taskId, updatedTask) => {
     setTodoList(
-      todoList.map((task) => (task.id == taskId ? updatedTask : task))
+      todoList.map((task) => (task._id == taskId ? updatedTask : task))
     );
   };
 
   const removeTask = (deletedTaskId) => {
-    setTodoList(todoList.filter((task) => task.id != deletedTaskId));
+    setTodoList(todoList.filter((task) => task._id != deletedTaskId));
   };
 
   const [TaskModalState, openTaskModal, closeTaskModal] = useModal();
@@ -84,9 +65,9 @@ export default function App() {
       </div>
 
       <div className="py-3">
-        {paginatedTodoList.map((task) => (
+        {filteredTodoList.map((task) => (
           <div
-            key={task.id}
+            key={task._id}
             className="box"
             onClick={() => {
               setCurrentTask(task);
@@ -100,7 +81,7 @@ export default function App() {
         ))}
       </div>
 
-      <Pagination todoList={filteredTodoList} page={page} setPage={setPage} />
+      <Pagination setTodoList={setTodoList} />
     </div>
   );
 }
