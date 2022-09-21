@@ -67,7 +67,11 @@ module.exports = (app) => {
     if (!isValidObjectId(req.params.id))
       return res.status(404).json({ success: false, msg: "Invalid id" });
 
-    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+    const isvalid = validateTask(req.body);
+    if (typeof isvalid == "string")
+      return res.status(404).json({ success: false, msg: isvalid });
+
+    const task = await Task.findByIdAndUpdate(req.params.id, isvalid, {
       new: true,
     });
     if (!task)
