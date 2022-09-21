@@ -10,7 +10,9 @@ const escape = (html) => {
     .replace(/'/g, "&#39;");
 };
 
-const validateTask = ({ title, description }) => {
+const validStatus = ["pending", "on progress", "done"];
+
+const validateTask = ({ title, description, status }) => {
   if (!title) return "missing title";
   if (title.length < 10) return "title must be at least 10 characters";
   if (title.length > 120) return "title must be less than 120 characters";
@@ -21,7 +23,9 @@ const validateTask = ({ title, description }) => {
   if (description.length > 1000)
     return "description must be less than 1000 characters";
 
-  return { title, description: escape(description) };
+  if (status && !validStatus.includes(status)) return "status is not valid";
+
+  return { title, description: escape(description), ...(status && { status }) };
 };
 
 module.exports = (app) => {

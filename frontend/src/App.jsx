@@ -6,7 +6,7 @@ import useModal from "../hooks/useModal";
 
 const status_class = {
   pending: "is-warning",
-  "on progree": "is-info",
+  "on progress": "is-info",
   done: "is-success",
 };
 
