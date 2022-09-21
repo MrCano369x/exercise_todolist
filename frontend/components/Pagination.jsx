@@ -1,46 +1,60 @@
-export default function Pagination() {
+export default function Pagination({ todoList, page, setPage }) {
+  const pages = Math.ceil(todoList.length / 15);
+
+  const isValidPage = (page) => {
+    if (page < 1) return false;
+    if (page > pages) return false;
+    return true;
+  };
+
   return (
     <nav
-      class="pagination is-centered"
+      className="pagination is-centered"
       role="navigation"
       aria-label="pagination"
     >
-      <a class="pagination-previous">Previous</a>
-      <a class="pagination-next">Next page</a>
-      <ul class="pagination-list">
+      <ul className="pagination-list">
         <li>
-          <a class="pagination-link" aria-label="Goto page 1">
-            1
+          <a className="pagination-link" onClick={() => setPage(1)}>
+            first
           </a>
         </li>
+
+        {isValidPage(page - 2) && (
+          <li>
+            <span className="pagination-ellipsis">&hellip;</span>
+          </li>
+        )}
+
+        {isValidPage(page - 1) && (
+          <li>
+            <a className="pagination-link" onClick={() => setPage(page - 1)}>
+              {page - 1}
+            </a>
+          </li>
+        )}
+
         <li>
-          <span class="pagination-ellipsis">&hellip;</span>
+          <a className="pagination-link is-current">{page}</a>
         </li>
+
+        {isValidPage(page + 1) && (
+          <li>
+            <a className="pagination-link" onClick={() => setPage(page + 1)}>
+              {page + 1}
+            </a>
+          </li>
+        )}
+
+        {isValidPage(page + 2) && (
+          <li>
+            <span className="pagination-ellipsis">&hellip;</span>
+          </li>
+        )}
+
         <li>
-          <a class="pagination-link" aria-label="Goto page 45">
-            45
-          </a>
-        </li>
-        <li>
-          <a
-            class="pagination-link is-current"
-            aria-label="Page 46"
-            aria-current="page"
-          >
-            46
-          </a>
-        </li>
-        <li>
-          <a class="pagination-link" aria-label="Goto page 47">
-            47
-          </a>
-        </li>
-        <li>
-          <span class="pagination-ellipsis">&hellip;</span>
-        </li>
-        <li>
-          <a class="pagination-link" aria-label="Goto page 86">
-            86
+          <a className="pagination-link" onClick={() => setPage(pages)}>
+            last
           </a>
         </li>
       </ul>

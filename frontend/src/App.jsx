@@ -4,54 +4,34 @@ import TaskModal from "../components/TaskModal";
 import Pagination from "../components/Pagination";
 import useModal from "../hooks/useModal";
 
-const example_todolist = [
-  {
-    id: "1",
-    title: "todo1",
+const statuses = ["pending", "on progress", "done"];
+
+const example_todolist = [];
+for (let i = 0; i < 71; i++) {
+  example_todolist.push({
+    id: i,
+    title: "Todo " + i,
     description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "pending",
-  },
-  {
-    id: "2",
-    title: "todo2",
-    description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "done",
-  },
-  {
-    id: "3",
-    title: "todo3",
-    description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "on progress",
-  },
-  {
-    id: "4",
-    title: "todo4",
-    description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "on progress",
-  },
-  {
-    id: "5",
-    title: "todo5",
-    description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "pending",
-  },
-  {
-    id: "6",
-    title: "todo6",
-    description: "lorem ipsum dolor sit amet, consectetur adip",
-    status: "done",
-  },
-];
+    status: statuses[Math.trunc(Math.random() * 3)],
+  });
+}
 
 export default function App() {
   const [todoList, setTodoList] = useState(example_todolist);
   const [filter, setFilter] = useState("all");
   const [currentTask, setCurrentTask] = useState({});
+  const [page, setPage] = useState(1);
+  console.log(page);
 
   const filteredTodoList =
     filter == "all"
       ? todoList
       : todoList.filter((task) => task.status == filter);
+
+  const paginatedTodoList = filteredTodoList.slice(
+    (page - 1) * 15,
+    (page - 1) * 15 + 15
+  );
 
   const addNewTask = (newTask) => {
     setTodoList([...todoList, newTask]);
@@ -104,7 +84,7 @@ export default function App() {
       </div>
 
       <div className="py-3">
-        {filteredTodoList.map((task) => (
+        {paginatedTodoList.map((task) => (
           <div
             key={task.id}
             className="box"
@@ -120,7 +100,7 @@ export default function App() {
         ))}
       </div>
 
-      <Pagination />
+      <Pagination todoList={filteredTodoList} page={page} setPage={setPage} />
     </div>
   );
 }
